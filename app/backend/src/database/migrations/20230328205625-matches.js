@@ -9,28 +9,28 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      homeTeam: {
+      homeTeamId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'teams',
           key: 'id',
         },
-        field: 'home_team',
+        field: 'home_team_id',
       },
       homeTeamGoals: {
         type: Sequelize.INTEGER,
         allowNull: true,
         field: 'home_team_goals',
       },
-      awayTeam: {
+      awayTeamId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'teams',
           key: 'id',
         },
-        field: 'away_team',
+        field: 'away_team_id',
       },
       awayTeamGoals: {
         type: Sequelize.INTEGER,
