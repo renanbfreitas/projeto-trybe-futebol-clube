@@ -3,11 +3,11 @@ import ILogin from '../interfaces/ILogin';
 
 require('dotenv/config');
 
-const secret = process.env.JWT_SECRET || 'jwt_secret';
+const secret: string = process.env.JWT_SECRET || 'jwt_secret';
 
 function tokenGenerate(user: ILogin): string {
   const token = jwt.sign(
-    { data: { userId: user.email } },
+    { data: { userEmail: user.email } },
     secret,
     { expiresIn: '14d', algorithm: 'HS256' },
   );

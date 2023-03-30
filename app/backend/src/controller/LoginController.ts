@@ -17,6 +17,15 @@ class LoginController {
     const token = tokenGenerate({ email, password });
     return res.status(200).json({ token });
   }
+
+  async getRole(req: Request, res: Response) {
+    const { userEmail } = req.body;
+    const result = await this._service.getRole(userEmail);
+    if (!result) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+    return res.status(200).json(result);
+  }
 }
 
 export default LoginController;
