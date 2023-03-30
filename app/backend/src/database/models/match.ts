@@ -1,59 +1,60 @@
-import { Model, INTEGER } from 'sequelize';
-import db from '.';
+import { Model, INTEGER, BOOLEAN } from 'sequelize';
 import TeamModel from './team';
-// import OtherModel from './OtherModel';
+import db from '.';
 
 class MatchModel extends Model {
-  public id!: number;
-  public homeTeam!: number;
-  public homeTeamGoals!: number;
-  public awayTeam!: number;
-  public awayTeamGoals!: number;
-  public inProgress!: number;
+  declare readonly id: number;
+  declare homeTeamId: number;
+  declare homeTeamGoals: number;
+  declare awayTeamId: number;
+  declare awayTeamGoals: number;
+  declare inProgress: boolean;
 }
-
 MatchModel.init({
   id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
     type: INTEGER,
+  },
+  homeTeamId: {
     allowNull: false,
     primaryKey: true,
-    autoIncrement: true,
-  },
-  homeTeam: {
     type: INTEGER,
-    allowNull: false,
+    field: 'home_team_id',
   },
   homeTeamGoals: {
-    type: INTEGER,
-    allowNull: true,
-  },
-  awayTeam: {
-    type: INTEGER,
     allowNull: false,
+    type: INTEGER,
+    field: 'home_team_goals',
+  },
+  awayTeamId: {
+    allowNull: false,
+    primaryKey: true,
+    type: INTEGER,
+    field: 'away_team_id',
   },
   awayTeamGoals: {
+    allowNull: false,
     type: INTEGER,
-    allowNull: true,
+    field: 'away_team_goals',
   },
   inProgress: {
-    type: INTEGER,
     allowNull: false,
+    type: BOOLEAN,
+    field: 'in_progress',
   },
 }, {
   sequelize: db,
-  modelName: 'matches',
   underscored: true,
   timestamps: false,
+  modelName: 'matches',
 });
 
-/**
-  * `Workaround` para aplicar as associations em TS:
-  * Associations 1:N devem ficar em uma das instâncias de modelo
-  * */
+MatchModel.belongsTo(TeamModel, { foreignKey: 'home_team_id', as: 'homeTeam' });
+TeamModel.hasMany(MatchModel, { foreignKey: 'home_team_id', as: 'homeTeam' });
 
-TeamModel.belongsTo(MatchModel, { foreignKey: 'id', as: 'matches' });
-
-MatchModel.hasMany(TeamModel, { foreignKey: 'homeTeam', as: 'teamHome' });
-MatchModel.hasMany(TeamModel, { foreignKey: 'awayTeam', as: 'teamAway' });
+MatchModel.belongsTo(TeamModel, { foreignKey: 'away_team_id', as: 'awayTeam' });
+TeamModel.hasMany(MatchModel, { foreignKey: 'away_team_id', as: 'awayTeam' });
 
 export default MatchModel;
