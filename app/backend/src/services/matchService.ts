@@ -4,6 +4,7 @@ import IServiceMatch from '../interfaces/IServiceMatch';
 import IMatchOutput from '../interfaces/IMatchOutput';
 import TeamModel from '../database/models/team';
 import IMatchInProgress from '../interfaces/IMatchInProgress';
+import IMatch from '../interfaces/IMatch';
 
 class MatchService implements IServiceMatch {
   protected model: ModelStatic<MatchModel> = MatchModel;
@@ -46,6 +47,17 @@ class MatchService implements IServiceMatch {
     });
     console.log(match);
     return matchInProgress;
+  }
+
+  async insertMatch(match: IMatch): Promise<IMatch> {
+    const newMatch = await this.model.create({
+      homeTeamId: match.homeTeamId,
+      homeTeamGoals: match.homeTeamGoals,
+      awayTeamId: match.awayTeamId,
+      awayTeamGoals: match.awayTeamGoals,
+      inProgress: true,
+    });
+    return newMatch.dataValues;
   }
 }
 
