@@ -29,6 +29,11 @@ class MatchService implements IServiceMatch {
       ],
     });
   }
+
+  async uploadInProgress(id: number): Promise<string> {
+    await this.model.update({ inProgress: false }, { where: { id } });
+    return 'Finished';
+  }
 }
 
 export default MatchService;
